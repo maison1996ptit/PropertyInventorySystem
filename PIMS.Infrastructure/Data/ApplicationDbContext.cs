@@ -12,60 +12,33 @@ namespace PIMS.Infrastructure.Data
         }
         public DbSet<Property> Properties { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<PropertyPriceAudit> PropertyPriceAudits { get; set; }
+        public DbSet<PriceOfAcquisition> PriceOfAcquisitions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Property>(entity =>
-            {
-                entity.ToTable("Properties");
-                entity.Property(e => e.Id)
-                    .IsRequired();
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .HasColumnType("nvarchar");
-                entity.Property(e => e.Address)
-                    .HasMaxLength(200)
-                    .HasColumnType("nvarchar");
-                entity.Property(e => e.Price)
-                    .IsRequired()
-                    .HasColumnType("decimal(18,2)");
-                entity.Property(e => e.OwnerId) // Foreign key referencing Contact.Id
-                    .IsRequired(false); // OwnerId is optional
-                entity.Property(e => e.CreatedDate)
-                    .IsRequired()
-                    .HasColumnType("datetime2");
+            base.OnModelCreating(modelBuilder);
 
-                // Define the relationship and deletion behavior
-                entity.HasOne<Contact>()
-                    .WithMany(c => c.Properties)
-                    .HasForeignKey(e => e.OwnerId) // Foreign key in Property referencing Contact.Id
-                    .OnDelete(DeleteBehavior.SetNull); // Set OwnerId to NULL when Contact is deleted
-            });
+            modelBuilder.Entity<PriceOfAcquisition>()
+                .HasKey(pc => new { pc.PropertyId, pc.ContactId });
 
-            modelBuilder.Entity<Contact>(entity =>
-            {
-                entity.ToTable("Contacts");
-                entity.Property(e => e.Id)
-                    .IsRequired();
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .HasColumnType("nvarchar");
-                entity.Property(e => e.LastName)
-                    .HasMaxLength(200)
-                    .HasColumnType("nvarchar");
-                entity.Property(e => e.EmailAddress)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .HasColumnType("nvarchar");
+            modelBuilder.Entity<PriceOfAcquisition>()
+                .HasOne(pc => pc.Property)
+                .WithMany(p => p.PropertyContacts)
+                .HasForeignKey(pc => pc.PropertyId)
+                .OnDelete(DeleteBehavior.Restrict); 
 
-                // Contact can have many Properties
-                entity.HasMany(c => c.Properties)
-                    .WithOne(p => p.Contact) // Property has one Contact
-                    .HasForeignKey(p => p.OwnerId) // Foreign key in Property pointing to Contact.Id
-                    .OnDelete(DeleteBehavior.SetNull); // Set OwnerId to NULL when Contact is deleted
-            });
+            modelBuilder.Entity<PriceOfAcquisition>()
+                .HasOne(pc => pc.Contact)
+                .WithMany(c => c.PropertyContacts)
+                .HasForeignKey(pc => pc.ContactId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PropertyPriceAudit>()
+               .HasOne(pa => pa.Property)  
+               .WithMany(p => p.propertyPriceAudits) 
+               .HasForeignKey(pa => pa.PropertyId)  
+               .OnDelete(DeleteBehavior.Cascade);  
         }
     }   
 }

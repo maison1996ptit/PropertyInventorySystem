@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections;
+using System.Runtime.CompilerServices;
 
 namespace PIMS.Domain.Entities
 {
@@ -11,17 +12,16 @@ namespace PIMS.Domain.Entities
             Address = address;
             Price = price;
             CreatedDate = dateTime;
-
         }
 
-        public Property() { }
-
+        public Property() {
+        }
         public Guid Id { get; set; }  
         public string Name { get; set; } = string.Empty;
-        public Guid? OwnerId { get; set; } 
         public string Address { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public DateTime CreatedDate { get; set; }
-        public Contact? Contact { get; set; }
+        public ICollection<PriceOfAcquisition> PropertyContacts { get; set; }
+        public ICollection<PropertyPriceAudit> propertyPriceAudits { get; set; }
     }
 }

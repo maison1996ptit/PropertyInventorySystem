@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PIMS.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b0bda1f2ce1d2005a52f2060e8ca536d02e0c1d0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+370ec74d490dccc98220a9bfcb5bd4a8ee274e7a")]
 [assembly: System.Reflection.AssemblyProductAttribute("PIMS.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PIMS.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,15 +1,15 @@
 [
   {
     "ContainingType": "PIMS.API.Controllers.ContactController",
-    "Method": "AddContact",
+    "Method": "AddAsync",
     "RelativePath": "api/v1/Contact",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "contactDto",
-        "Type": "PIMS.Application.Dtos.ContactDto",
+        "Name": "contact",
+        "Type": "PIMS.Domain.Entities.Contact",
         "IsRequired": true
       }
     ],
@@ -17,14 +17,24 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.ContactController",
-    "Method": "DeleteProperty",
-    "RelativePath": "api/v1/Contact/DeleteContact",
-    "HttpMethod": "DELETE",
+    "Method": "GetAllAsync",
+    "RelativePath": "api/v1/Contact",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "email",
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "filter",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -33,15 +43,15 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.ContactController",
-    "Method": "FindContactByEmail",
-    "RelativePath": "api/v1/Contact/FindContactByEmail/{email}",
-    "HttpMethod": "GET",
+    "Method": "UpdateAsync",
+    "RelativePath": "api/v1/Contact",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "email",
-        "Type": "System.String",
+        "Name": "contact",
+        "Type": "PIMS.Domain.Entities.Contact",
         "IsRequired": true
       }
     ],
@@ -49,15 +59,47 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.ContactController",
-    "Method": "UpdateContact",
-    "RelativePath": "api/v1/Contact/UpdateContact",
+    "Method": "GetByIdAsync",
+    "RelativePath": "api/v1/Contact/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.ContactController",
+    "Method": "AddAsync",
+    "RelativePath": "api/v1/Contact/bulk",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "contacts",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Domain.Entities.Contact, PIMS.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.ContactController",
+    "Method": "UpdateAsync",
+    "RelativePath": "api/v1/Contact/bulk",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "req",
-        "Type": "PIMS.Application.Dtos.ContactDto",
+        "Name": "contacts",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Domain.Entities.Contact, PIMS.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
@@ -65,15 +107,15 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.PropertyController",
-    "Method": "AddProperty",
+    "Method": "AddAsync",
     "RelativePath": "api/v1/Property",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "propertyDto",
-        "Type": "PIMS.Application.Dtos.PropertyDto",
+        "Name": "entity",
+        "Type": "PIMS.Domain.Entities.Property",
         "IsRequired": true
       }
     ],
@@ -81,36 +123,41 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.PropertyController",
-    "Method": "DeleteProperty",
-    "RelativePath": "api/v1/Property/DeletePropertyByName/{name}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "name",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "price",
-        "Type": "System.Decimal",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "PIMS.API.Controllers.PropertyController",
-    "Method": "FindPropertyByName",
-    "RelativePath": "api/v1/Property/FindPropertyByName/{name}",
+    "Method": "GetAllAsync",
+    "RelativePath": "api/v1/Property",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "name",
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "filter",
         "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.PropertyController",
+    "Method": "UpdateAsync",
+    "RelativePath": "api/v1/Property",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entity",
+        "Type": "PIMS.Domain.Entities.Property",
         "IsRequired": true
       }
     ],
@@ -118,25 +165,47 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.PropertyController",
-    "Method": "UpdateProperty",
-    "RelativePath": "api/v1/Property/UpdatePropertyByName/{name}",
+    "Method": "GetByIdAsync",
+    "RelativePath": "api/v1/Property/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.PropertyController",
+    "Method": "AddAsync",
+    "RelativePath": "api/v1/Property/bulk",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entities",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Domain.Entities.Property, PIMS.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.PropertyController",
+    "Method": "UpdateAsync",
+    "RelativePath": "api/v1/Property/bulk",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "name",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "price",
-        "Type": "System.Decimal",
-        "IsRequired": false
-      },
-      {
-        "Name": "propertyDto",
-        "Type": "PIMS.Application.Dtos.PropertyDto",
+        "Name": "entities",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Domain.Entities.Property, PIMS.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],

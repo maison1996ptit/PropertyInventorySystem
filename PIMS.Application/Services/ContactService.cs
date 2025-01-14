@@ -24,75 +24,83 @@ namespace PIMS.Application.Services
             _contactValidator = new ContactValidator();
             _unitOfWork = unitOfWork;
         }
+
         public async Task AddAsync(Contact entity, CancellationToken cancellationToken)
         {
-            try
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            var validationResult = _contactValidator.Validate(entity);
+            if (!validationResult.IsValid)
+                throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
+
+            await _unitOfWork.contactRepository.AddAsync(entity, cancellationToken);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task AddAsync(IEnumerable<Contact> entities, CancellationToken cancellationToken)
+        {
+            if (entities == null || !entities.Any())
+                throw new ArgumentException("Entities collection is null or empty.");
+
+            foreach (var entity in entities)
             {
                 var validationResult = _contactValidator.Validate(entity);
-
                 if (!validationResult.IsValid)
-                {
-                    throw new ValidationException("Contact validation failed.", validationResult.Errors);
-                }
+                    throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
+            }
 
-                await _unitOfWork.contactRepository.AddAsync(entity, cancellationToken);
-            }
-            catch (Exception ex) when (ex is not ValidationException )
-            {
-                throw new Exception("An error occurred while adding the Contact.", ex);
-            }
+            await _unitOfWork.contactRepository.AddAsync(entities, cancellationToken);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Contact>> GetAllAsync(int pageNumber, int pageSize, string filter, CancellationToken cancellationToken)
+        {
+            if (pageNumber <= 0 || pageSize <= 0)
+                throw new ArgumentException("Page number and page size must be greater than zero.");
+
+            return await _unitOfWork.contactRepository.GetAllAsync(pageNumber, pageSize, filter, cancellationToken);
+        }
+
+        public async Task<Contact> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             if (id == Guid.Empty)
-            {
-                throw new ArgumentException("The ID cannot be empty.");
-            }
-            try
-            {
-                await _unitOfWork.contactRepository.DeleteAsync(id, cancellationToken);
-            }
-            catch (Exception ex) when ( ex is not ArgumentException)
-            {
-                throw new Exception("Failed to delete the Contact. Please try again later.", ex);
-            }
-        }
+                throw new ArgumentException("ID cannot be an empty GUID.");
 
-        public async Task<IEnumerable<Contact>> GetAllAsync(CancellationToken cancellationToken)
-        {
+            var property = await _unitOfWork.contactRepository.GetByIdAsync(id, cancellationToken);
+            if (property == null)
+                throw new KeyNotFoundException($"Property with ID {id} not found.");
 
-            return await _unitOfWork.contactRepository.GetAllAsync(cancellationToken);
-        }
-
-        public async Task<Contact> GetByEmailAsync(string email, CancellationToken cancellationToken)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                throw new ArgumentException("Email cannot be null or empty.", nameof(email));
-            }
-            try
-            {
-                return await _unitOfWork.contactRepository.GetByEmailAsync(email,cancellationToken);
-            }
-            catch (Exception ex) when ( ex is not ArgumentException)
-            {
-                throw new Exception("An error occurred while Find Contact.", ex);
-            }
+            return property;
         }
 
         public async Task UpdateAsync(Contact entity, CancellationToken cancellationToken)
         {
             if (entity == null)
-                throw new ArgumentNullException(nameof(entity), "The property entity cannot be null.");
-            try
+                throw new ArgumentNullException(nameof(entity));
+
+            var validationResult = _contactValidator.Validate(entity);
+            if (!validationResult.IsValid)
+                throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
+
+            _unitOfWork.contactRepository.UpdateAsync(entity, cancellationToken);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(IEnumerable<Contact> entities, CancellationToken cancellationToken)
+        {
+            if (entities == null || !entities.Any())
+                throw new ArgumentException("Entities collection is null or empty.");
+
+            foreach (var entity in entities)
             {
-                await _unitOfWork.contactRepository.UpdateAsync(entity, cancellationToken);
+                var validationResult = _contactValidator.Validate(entity);
+                if (!validationResult.IsValid)
+                    throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
             }
-            catch (Exception ex) when (ex is not KeyNotFoundException || ex is not ArgumentException)
-            {
-                throw new Exception("An error occurred while Update the property.", ex);
-            }
+
+            _unitOfWork.contactRepository.UpdateAsync(entities, cancellationToken);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

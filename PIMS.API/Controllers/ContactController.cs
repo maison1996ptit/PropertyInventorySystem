@@ -16,100 +16,113 @@ namespace PIMS.API.Controllers
             _contactService = contactService;
         }
         [HttpPost]
-        public async Task<IActionResult> AddContact([FromBody] ContactDto contactDto
-            , CancellationToken cancellationToken)
+        public async Task<IActionResult> AddAsync([FromBody] Contact contact, CancellationToken cancellationToken)
         {
-            if (contactDto == null)
-            {
-                return BadRequest("Invalid data.");
-            }
-
-            var contact = new Contact
-            {
-                FirstName = contactDto.FirstName,
-                LastName = contactDto.LastName,
-                EmailAddress = contactDto.EmailAddress,
-                PhoneNumber = contactDto.PhoneNumber,
-            };
-
-            await _contactService.AddAsync(contact, cancellationToken);
-
-            return CreatedAtAction(nameof(AddContact)
-                , new { id = contact.Id }, contact);
-        }
-        [HttpGet("FindContactByEmail/{email}")]
-        public async Task<IActionResult> FindContactByEmail(string email
-            , CancellationToken cancellationToken)
-        {
-            // Validate input
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                return BadRequest("Contact email cannot be null or empty.");
-            }
-
             try
             {
-                // Call service to retrieve the contact
-                var contact = await _contactService.GetByEmailAsync(email, cancellationToken);
-
-                // Handle not found case
-                if (contact == null)
-                {
-                    return NotFound($"Contact with Email '{email}' was not found.");
-                }
-
-                // Return the found property
-                return Ok(contact);
+                await _contactService.AddAsync(contact, cancellationToken);
+                return CreatedAtAction(nameof(GetByIdAsync), new { id = contact.Id }, contact);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                // Return a generic error message
-                return StatusCode(500, "An error occurred while processing your request. Please try again later.");
+                return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpPut("UpdateContact")]
-        public async Task<IActionResult> UpdateContact([FromBody] ContactDto req
-            , CancellationToken cancellationToken)
+        [HttpPost("bulk")]
+        public async Task<IActionResult> AddAsync([FromBody] IEnumerable<Contact> contacts, CancellationToken cancellationToken)
         {
-            if (req == null)
+            try
             {
-                return BadRequest("Invalid data.");
+                await _contactService.AddAsync(contacts, cancellationToken);
+                return NoContent(); // Return a successful response with no content for bulk create
             }
-
-            var res = await _contactService.GetByEmailAsync(req.EmailAddress, cancellationToken);
-            if (res == null)
+            catch (ArgumentException ex)
             {
-                return NotFound("Contact not found.");
+                return BadRequest(ex.Message);
             }
-
-            // Update data in record
-            res.FirstName = req.FirstName;
-            res.LastName = req.LastName;
-            res.EmailAddress = req.EmailAddress;
-            res.PhoneNumber = req.PhoneNumber;
-
-            await _contactService.UpdateAsync(res, cancellationToken);
-
-            return NoContent(); // 204 - success not return data
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
-        [HttpDelete("DeleteContact")]
-        public async Task<IActionResult> DeleteProperty(string email,CancellationToken cancellationToken)
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string filter, CancellationToken cancellationToken)
         {
-            // Validate input
-            if (string.IsNullOrWhiteSpace(email))
+            try
             {
-                return BadRequest("Contact email cannot be null or empty.");
+                var contacts = await _contactService.GetAllAsync(pageNumber, pageSize, filter, cancellationToken);
+                return Ok(contacts);
             }
-            var contact = await _contactService.GetByEmailAsync(email,cancellationToken);
-            if (contact == null)
+            catch (ArgumentException ex)
             {
-                return NotFound("Contact not found.");
+                return BadRequest(ex.Message);
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-            await _contactService.DeleteAsync(contact.Id,cancellationToken);
-
-            return NoContent(); // 204 - success not return data
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var contact = await _contactService.GetByIdAsync(id, cancellationToken);
+                return Ok(contact);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync([FromBody] Contact contact, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _contactService.UpdateAsync(contact, cancellationToken);
+                return NoContent(); // Return a successful response with no content
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPut("bulk")]
+        public async Task<IActionResult> UpdateAsync([FromBody] IEnumerable<Contact> contacts, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _contactService.UpdateAsync(contacts, cancellationToken);
+                return NoContent(); // Return a successful response with no content
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

@@ -16,95 +16,115 @@ namespace PIMS.API.Controllers
             _propertyService = propertyService;
         }
         [HttpPost]
-        public async Task<IActionResult> AddProperty([FromBody] PropertyDto propertyDto
-            ,CancellationToken cancellationToken)
+        public async Task<IActionResult> AddAsync([FromBody] Property entity, CancellationToken cancellationToken)
         {
-            if (propertyDto == null)
-            {
-                return BadRequest("Invalid data.");
-            }
-
-            var property = new Property
-            {
-                Name = propertyDto.Name,
-                Address = propertyDto.Address,
-                Price = propertyDto.Price,
-                OwnerId = propertyDto.OwnerId,
-            };
-
-            await _propertyService.AddAsync(property,cancellationToken);
-
-            return CreatedAtAction(nameof(AddProperty)
-                , new { id = property.Id }, property);
-        }
-        [HttpGet("FindPropertyByName/{name}")]
-        public async Task<IActionResult> FindPropertyByName(string name
-            ,CancellationToken cancellationToken)
-        {
-            // Validate input
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return BadRequest("Property name cannot be null or empty.");
-            }
-
             try
             {
-                // Call service to retrieve the property
-                var property = await _propertyService.GetByNameAsync(name,cancellationToken);
+                await _propertyService.AddAsync(entity, cancellationToken);
+                return CreatedAtAction(nameof(GetByIdAsync), new { id = entity.Id }, entity);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
 
-                // Handle not found case
-                if (property == null)
-                {
-                    return NotFound($"Property with name '{name}' was not found.");
-                }
+        [HttpPost("bulk")]
+        public async Task<IActionResult> AddAsync([FromBody] IEnumerable<Property> entities, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _propertyService.AddAsync(entities, cancellationToken);
+                return Ok(entities);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
 
-                // Return the found property
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string filter, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var properties = await _propertyService.GetAllAsync(pageNumber, pageSize, filter, cancellationToken);
+                return Ok(properties);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var property = await _propertyService.GetByIdAsync(id, cancellationToken);
                 return Ok(property);
             }
-            catch (Exception ex)
+            catch (KeyNotFoundException ex)
             {
-                // Return a generic error message
-                return StatusCode(500, "An error occurred while processing your request. Please try again later.");
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
             }
         }
 
-        [HttpPut("UpdatePropertyByName/{name}")]
-        public async Task<IActionResult> UpdateProperty(string name,decimal price, [FromBody] PropertyDto propertyDto
-            ,CancellationToken cancellationToken)
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync([FromBody] Property entity, CancellationToken cancellationToken)
         {
-            if (propertyDto == null)
+            try
             {
-                return BadRequest("Invalid data.");
+                await _propertyService.UpdateAsync(entity, cancellationToken);
+                return NoContent();
             }
-
-            var property = await _propertyService.GetByNameAndPriceAsync(name, price, cancellationToken );
-            if (property == null)
+            catch (ArgumentException ex)
             {
-                return NotFound("Property not found.");
+                return BadRequest(ex.Message);
             }
-
-            // Update data in record
-            property.Name = propertyDto.Name;
-            property.Address = propertyDto.Address;
-            property.Price = propertyDto.Price;
-            property.OwnerId = propertyDto.OwnerId;
-
-            await _propertyService.UpdateAsync(property,cancellationToken);
-
-            return NoContent(); // 204 - success not return data
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
-        [HttpDelete("DeletePropertyByName/{name}")]
-        public async Task<IActionResult> DeleteProperty(string name,decimal price,CancellationToken cancellationToken)
+
+        [HttpPut("bulk")]
+        public async Task<IActionResult> UpdateAsync([FromBody] IEnumerable<Property> entities, CancellationToken cancellationToken)
         {
-            var property = await _propertyService.GetByNameAsync(name,cancellationToken);
-            if (property == null)
+            try
             {
-                return NotFound("Property not found.");
+                await _propertyService.UpdateAsync(entities, cancellationToken);
+                return Ok(entities);
             }
-
-            await _propertyService.DeleteAsync(name,price,cancellationToken);
-
-            return NoContent(); // 204 - success not return data
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
     }
 }

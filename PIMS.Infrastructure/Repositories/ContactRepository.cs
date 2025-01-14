@@ -25,84 +25,154 @@ namespace PIMS.Infrastructure.Repositories
 
         public async Task AddAsync(Contact entity, CancellationToken cancellationToken)
         {
+            // Validate that the input entity is not null
             if (entity == null)
-                throw new ArgumentNullException(nameof(entity), "The property entity cannot be null.");
-
-            // Check if the entity already exists (example: check by name)
-            var existingContact = await _context.Contacts
-                .FirstOrDefaultAsync(p => p.EmailAddress == entity.EmailAddress, cancellationToken);
-            if (existingContact != null)
-                throw new InvalidOperationException($"A Contact with the Email '{entity.EmailAddress}' already exists.");
-
-            try
             {
-                // Add the entity to the context
-                await _context.Contacts.AddAsync(entity);
-                await _context.SaveChangesAsync();
+                throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
             }
-            catch (DbUpdateException ex)
+            // Ensure the entity has a unique ID
+            if (entity.Id == Guid.Empty)
             {
-                _logger.LogError(ex, "An error occurred while fetching properties.");
-                throw new Exception("An error occurred while adding the property. Please try again later.");
+                // Assign a new GUID if the current ID is empty
+                entity.Id = Guid.NewGuid();
             }
+            // Add the entity to the database context
+            await _context.Contacts.AddAsync(entity, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task AddAsync(IEnumerable<Contact> entities, CancellationToken cancellationToken)
         {
-            // Find the property by ID
-            var contact = await _context.Contacts.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-            if (contact == null)
+            // Validate that the input collection is not null or empty
+            if (entities == null || !entities.Any())
             {
-                throw new KeyNotFoundException($"Contact was not found.");
+                throw new ArgumentException("Entities cannot be null or empty", nameof(entities));
             }
+            // Ensure each entity has a unique ID
+            foreach (var entity in entities)
+            {
+                // Assign a new GUID if the current ID is empty
+                if (entity.Id == Guid.Empty)
+                {
+                    entity.Id = Guid.NewGuid();
+                }
+            }
+            // Add the collection of entities to the database context
+            await _context.Contacts.AddRangeAsync(entities, cancellationToken);
 
-            // Remove the property from the DbContext
-            _context.Contacts.Remove(contact);
-
-            // Save the changes to the database
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Contact>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Contact>> GetAllAsync(int pageNumber, int pageSize, string filter, CancellationToken cancellationToken)
         {
-            try
+            // Validate input arguments
+            if (pageNumber <= 0)
             {
-                _logger.LogInformation("Fetching all properties from the database.");
-                var contacts = await _context.Contacts.ToListAsync(cancellationToken);
-                return contacts;
+                throw new ArgumentException("Page number must be greater than zero.", nameof(pageNumber));
             }
-            catch (Exception ex)
+            if (pageSize <= 0)
             {
-                _logger.LogError(ex, "An error occurred while fetching properties.");
-                throw new Exception("Failed to fetch properties. Please try again later.");
+                throw new ArgumentException("Page size must be greater than zero.", nameof(pageSize));
             }
+            // Start building the query to fetch data from the database
+            IQueryable<Contact> query = _context.Contacts.AsQueryable();
+
+            // Apply filter if provided
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                query = query.Where(p => p.FirstName.Contains(filter));
+            }
+            query = query
+                .Skip((pageNumber - 1) * pageSize) // Skip the items of previous pages
+                .Take(pageSize);                  // Take only the items for the current page
+
+            var result = await query.ToListAsync(cancellationToken);
+
+            return result;
         }
 
-        public async Task<Contact> GetByEmailAsync(string email, CancellationToken cancellationToken)
+        public async Task<Contact> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrWhiteSpace(email))
+            // Validate the input ID
+            if (id == Guid.Empty)
             {
-                throw new ArgumentException("Contact email cannot empty.");
+                throw new ArgumentException("ID cannot be an empty GUID.", nameof(id));
             }
+            // Fetch the entity from the database based on the provided ID
+            var entity = await _context.Contacts
+                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
 
-            var contact = await _context.Contacts.FirstOrDefaultAsync(p => p.EmailAddress == email, cancellationToken);
-
-            if (contact == null)
+            // Check if the entity was not found and throw an exception if needed
+            if (entity == null)
             {
-                throw new KeyNotFoundException($"Contact with email {email} not found.");
+                throw new KeyNotFoundException($"No entity found with ID {id}.");
             }
-
-            return contact;
+            return entity;
         }
 
         public async Task UpdateAsync(Contact entity, CancellationToken cancellationToken)
         {
+            // Validate the input entity
             if (entity == null)
             {
-                throw new ArgumentNullException(nameof(entity), "The Contact entity cannot be null.");
+                throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
+            }
+            // Ensure the entity has a valid ID
+            if (entity.Id == Guid.Empty)
+            {
+                throw new ArgumentException("Entity must have a valid ID.", nameof(entity));
+            }
+            // Check if the entity exists in the database
+            var existingEntity = await _context.Contacts
+                .FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
+
+            if (existingEntity == null)
+            {
+                throw new KeyNotFoundException($"No entity found with ID {entity.Id}.");
             }
 
-            _context.Contacts.Update(entity);
+            // Update the existing entity with the new values
+            _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task UpdateAsync(IEnumerable<Contact> entities, CancellationToken cancellationToken)
+        {
+            // Validate the input collection
+            if (entities == null || !entities.Any())
+            {
+                throw new ArgumentException("Entities cannot be null or empty.", nameof(entities));
+            }
+
+            // Iterate through the entities to perform validation and update logic
+            foreach (var entity in entities)
+            {
+                // Ensure the entity is not null
+                if (entity == null)
+                {
+                    throw new ArgumentNullException(nameof(entity), "One of the entities is null.");
+                }
+
+                // Ensure the entity has a valid ID
+                if (entity.Id == Guid.Empty)
+                {
+                    throw new ArgumentException("One of the entities has an invalid ID (empty GUID).", nameof(entity));
+                }
+
+                // Check if the entity exists in the database
+                var existingEntity = await _context.Contacts
+                    .FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
+
+                if (existingEntity == null)
+                {
+                    throw new KeyNotFoundException($"No entity found with ID {entity.Id}.");
+                }
+                // Update the existing entity with the new values
+                _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
         }
     }

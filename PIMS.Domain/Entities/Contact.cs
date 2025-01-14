@@ -13,12 +13,12 @@ namespace PIMS.Domain.Entities
             LastName = lastName;
             PhoneNumber = phoneNumber;
             EmailAddress = emailAddress;
-            Properties = new List<Property>(); 
+            PropertyContacts = new List<PriceOfAcquisition>();
         }
 
-        public Contact() 
+        public Contact()
         {
-            Properties = new List<Property>(); 
+            PropertyContacts = new List<PriceOfAcquisition>(); 
         }
 
         public Guid Id { get; set; }
@@ -26,9 +26,7 @@ namespace PIMS.Domain.Entities
         public string LastName { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string EmailAddress { get; set; } = string.Empty;
-
-        public ICollection<Property> Properties { get; set; }
-
+        public ICollection<PriceOfAcquisition> PropertyContacts { get; set; }
     }
     
 }

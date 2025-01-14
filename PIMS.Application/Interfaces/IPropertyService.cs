@@ -4,11 +4,12 @@ namespace PIMS.Application.Interfaces
 {
     public interface IPropertyService
     {
-        Task<IEnumerable<Property>> GetByNameAsync(string name, CancellationToken cancellationToken);
-        Task<IEnumerable<Property>> GetAllAsync(CancellationToken cancellationToken);
+        Task<Property> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<IEnumerable<Property>> GetAllAsync(int pageNumber, int pageSize
+                                        , string filter, CancellationToken cancellationToken);
         Task AddAsync(Property entity, CancellationToken cancellationToken);
+        Task AddAsync(IEnumerable<Property> entities, CancellationToken cancellationToken);
         Task UpdateAsync(Property entity, CancellationToken cancellationToken);
-        Task DeleteAsync(string name, decimal price, CancellationToken cancellationToken);
-        Task<Property> GetByNameAndPriceAsync(string name, decimal price, CancellationToken cancellationToken);
+        Task UpdateAsync(IEnumerable<Property> entities, CancellationToken cancellationToken);
     }
 }

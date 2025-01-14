@@ -9,10 +9,12 @@ namespace PIMS.Application.Interfaces
 {
     public interface IContactService
     {
-        Task<Contact> GetByEmailAsync(string email, CancellationToken cancellationToken);
-        Task<IEnumerable<Contact>> GetAllAsync(CancellationToken cancellationToken);
+        Task<Contact> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<IEnumerable<Contact>> GetAllAsync(int pageNumber, int pageSize
+                                        , string filter, CancellationToken cancellationToken);
         Task AddAsync(Contact entity, CancellationToken cancellationToken);
+        Task AddAsync(IEnumerable<Contact> entities, CancellationToken cancellationToken);
         Task UpdateAsync(Contact entity, CancellationToken cancellationToken);
-        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task UpdateAsync(IEnumerable<Contact> entities, CancellationToken cancellationToken);
     }
 }
