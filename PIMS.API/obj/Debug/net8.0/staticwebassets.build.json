@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "A4oWrbFJo3EJm+MrLws0AZFvgcTKuNnQ5+p4vSrc/Ec=",
+  "Source": "PIMS.API",
+  "BasePath": "_content/PIMS.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

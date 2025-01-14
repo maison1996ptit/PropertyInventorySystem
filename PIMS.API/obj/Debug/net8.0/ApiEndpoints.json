@@ -1,0 +1,145 @@
+[
+  {
+    "ContainingType": "PIMS.API.Controllers.ContactController",
+    "Method": "AddContact",
+    "RelativePath": "api/v1/Contact",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "contactDto",
+        "Type": "PIMS.Application.Dtos.ContactDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.ContactController",
+    "Method": "DeleteProperty",
+    "RelativePath": "api/v1/Contact/DeleteContact",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.ContactController",
+    "Method": "FindContactByEmail",
+    "RelativePath": "api/v1/Contact/FindContactByEmail/{email}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.ContactController",
+    "Method": "UpdateContact",
+    "RelativePath": "api/v1/Contact/UpdateContact",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "PIMS.Application.Dtos.ContactDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.PropertyController",
+    "Method": "AddProperty",
+    "RelativePath": "api/v1/Property",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDto",
+        "Type": "PIMS.Application.Dtos.PropertyDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.PropertyController",
+    "Method": "DeleteProperty",
+    "RelativePath": "api/v1/Property/DeletePropertyByName/{name}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "price",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.PropertyController",
+    "Method": "FindPropertyByName",
+    "RelativePath": "api/v1/Property/FindPropertyByName/{name}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.PropertyController",
+    "Method": "UpdateProperty",
+    "RelativePath": "api/v1/Property/UpdatePropertyByName/{name}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "price",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "propertyDto",
+        "Type": "PIMS.Application.Dtos.PropertyDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
