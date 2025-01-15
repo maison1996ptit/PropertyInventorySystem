@@ -57,6 +57,9 @@ namespace PIMS.Infrastructure.Migrations
                     b.Property<Guid>("ContactId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("AskingPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("EffectiveFrom")
                         .HasColumnType("datetime2");
 

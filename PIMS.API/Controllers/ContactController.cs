@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PIMS.Application.Dtos;
 using PIMS.Application.Interfaces;
+using PIMS.Application.Mappings;
 using PIMS.Domain.Entities;
 
 namespace PIMS.API.Controllers
@@ -15,13 +16,21 @@ namespace PIMS.API.Controllers
         {
             _contactService = contactService;
         }
-        [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] Contact contact, CancellationToken cancellationToken)
+        [HttpPost("create")]
+        public async Task<IActionResult> AddAsync([FromBody] ContactDto contact, CancellationToken cancellationToken)
         {
             try
             {
-                await _contactService.AddAsync(contact, cancellationToken);
-                return CreatedAtAction(nameof(GetByIdAsync), new { id = contact.Id }, contact);
+                Contact req = new Contact
+                {
+                    FirstName = contact.FirstName,
+                    LastName = contact.LastName,
+                    EmailAddress = contact.EmailAddress,
+                    PhoneNumber = contact.PhoneNumber,
+                };
+
+                await _contactService.AddAsync(req, cancellationToken);
+                return Ok(req);
             }
             catch (ArgumentException ex)
             {
@@ -33,13 +42,25 @@ namespace PIMS.API.Controllers
             }
         }
 
-        [HttpPost("bulk")]
-        public async Task<IActionResult> AddAsync([FromBody] IEnumerable<Contact> contacts, CancellationToken cancellationToken)
+        [HttpPost("create/bulk")]
+        public async Task<IActionResult> AddAsync([FromBody] IEnumerable<ContactDto> contacts, CancellationToken cancellationToken)
         {
+            // Check if the input data is null or empty
+            if (contacts == null || !contacts.Any())
+            {
+                return BadRequest("No contacts provided.");
+            }
+
             try
             {
-                await _contactService.AddAsync(contacts, cancellationToken);
-                return NoContent(); // Return a successful response with no content for bulk create
+                // Map the ContactDto objects to entities
+                var entities = ContactMapper.ToEntities(contacts);
+
+                // Call the service to add the contacts to the database asynchronously
+                await _contactService.AddAsync(entities, cancellationToken).ConfigureAwait(false);
+
+                // Return a NoContent (204) response indicating success with no content
+                return Ok(contacts);
             }
             catch (ArgumentException ex)
             {
@@ -47,11 +68,11 @@ namespace PIMS.API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "An unexpected error occurred. " + ex.Message);
             }
         }
 
-        [HttpGet]
+        [HttpGet("get")]
         public async Task<IActionResult> GetAllAsync([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string filter, CancellationToken cancellationToken)
         {
             try
@@ -69,7 +90,7 @@ namespace PIMS.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             try
@@ -90,12 +111,21 @@ namespace PIMS.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] Contact contact, CancellationToken cancellationToken)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateContactDto contact, CancellationToken cancellationToken)
         {
             try
             {
-                await _contactService.UpdateAsync(contact, cancellationToken);
+                Contact req = new Contact
+                {
+                    FirstName = contact.FirstName,
+                    LastName = contact.LastName,
+                    EmailAddress = contact.EmailAddress,
+                    PhoneNumber = contact.PhoneNumber,
+                    Id = contact.Id,
+                };
+
+                await _contactService.UpdateAsync(req, cancellationToken);
                 return NoContent(); // Return a successful response with no content
             }
             catch (ArgumentException ex)
@@ -107,12 +137,14 @@ namespace PIMS.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPut("bulk")]
-        public async Task<IActionResult> UpdateAsync([FromBody] IEnumerable<Contact> contacts, CancellationToken cancellationToken)
+        [HttpPut("update/bulk")]
+        public async Task<IActionResult> UpdateAsync([FromBody] IEnumerable<UpdateContactDto> contacts, CancellationToken cancellationToken)
         {
             try
             {
-                await _contactService.UpdateAsync(contacts, cancellationToken);
+               var req = ContactMapper.ToEntities(contacts);
+
+                await _contactService.UpdateAsync(req, cancellationToken);
                 return NoContent(); // Return a successful response with no content
             }
             catch (ArgumentException ex)

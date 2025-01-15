@@ -35,6 +35,7 @@ namespace PIMS.Infrastructure.Repositories
                 // Assign a new GUID if the current ID is empty
                 entity.Id = Guid.NewGuid();
             }
+            entity.CreatedDate = DateTime.UtcNow;
             // Add the entity to the database context
             await _context.Properties.AddAsync(entity, cancellationToken);
         
@@ -123,14 +124,14 @@ namespace PIMS.Infrastructure.Repositories
                 throw new ArgumentException("Entity must have a valid ID.", nameof(entity));
             }
             // Check if the entity exists in the database
-            var existingEntity = await _context.Properties
-                .FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
+            var existingEntity =  _context.Properties.FirstOrDefault(p => p.Id == entity.Id);
 
             if (existingEntity == null)
             {
                 throw new KeyNotFoundException($"No entity found with ID {entity.Id}.");
             }
-
+            // Add audit table
+            await AddAudit(entity, existingEntity, cancellationToken);
             // Update the existing entity with the new values
             _context.Entry(existingEntity).CurrentValues.SetValues(entity);
 
@@ -161,18 +162,31 @@ namespace PIMS.Infrastructure.Repositories
                 }
 
                 // Check if the entity exists in the database
-                var existingEntity = await _context.Properties
-                    .FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
+                var existingEntity =  _context.Properties.FirstOrDefault(p => p.Id == entity.Id);
 
                 if (existingEntity == null)
                 {
                     throw new KeyNotFoundException($"No entity found with ID {entity.Id}.");
                 }
+                // Add audit table
+                await AddAudit(entity, existingEntity, cancellationToken);
                 // Update the existing entity with the new values
                 _context.Entry(existingEntity).CurrentValues.SetValues(entity);
             }
 
             await _context.SaveChangesAsync(cancellationToken);
         }
+        public async Task AddAudit(Property newData, Property oldData, CancellationToken cancellationToken)
+        {
+            var auditData = new PropertyPriceAudit
+            {
+                PropertyId = newData.Id,
+                Price = oldData.Price,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            await _context.PropertyPriceAudits.AddAsync(auditData, cancellationToken);
+        }
+
     }
 }

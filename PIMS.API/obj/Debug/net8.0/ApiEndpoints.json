@@ -2,14 +2,30 @@
   {
     "ContainingType": "PIMS.API.Controllers.ContactController",
     "Method": "AddAsync",
-    "RelativePath": "api/v1/Contact",
+    "RelativePath": "api/v1/Contact/create",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "contact",
-        "Type": "PIMS.Domain.Entities.Contact",
+        "Type": "PIMS.Application.Dtos.ContactDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.ContactController",
+    "Method": "AddAsync",
+    "RelativePath": "api/v1/Contact/create/bulk",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "contacts",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Application.Dtos.ContactDto, PIMS.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
@@ -18,7 +34,7 @@
   {
     "ContainingType": "PIMS.API.Controllers.ContactController",
     "Method": "GetAllAsync",
-    "RelativePath": "api/v1/Contact",
+    "RelativePath": "api/v1/Contact/get",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -43,24 +59,8 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.ContactController",
-    "Method": "UpdateAsync",
-    "RelativePath": "api/v1/Contact",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "contact",
-        "Type": "PIMS.Domain.Entities.Contact",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "PIMS.API.Controllers.ContactController",
     "Method": "GetByIdAsync",
-    "RelativePath": "api/v1/Contact/{id}",
+    "RelativePath": "api/v1/Contact/get/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -75,15 +75,15 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.ContactController",
-    "Method": "AddAsync",
-    "RelativePath": "api/v1/Contact/bulk",
-    "HttpMethod": "POST",
+    "Method": "UpdateAsync",
+    "RelativePath": "api/v1/Contact/update",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "contacts",
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Domain.Entities.Contact, PIMS.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Name": "contact",
+        "Type": "PIMS.Application.Dtos.UpdateContactDto",
         "IsRequired": true
       }
     ],
@@ -92,14 +92,14 @@
   {
     "ContainingType": "PIMS.API.Controllers.ContactController",
     "Method": "UpdateAsync",
-    "RelativePath": "api/v1/Contact/bulk",
+    "RelativePath": "api/v1/Contact/update/bulk",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "contacts",
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Domain.Entities.Contact, PIMS.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Application.Dtos.UpdateContactDto, PIMS.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
@@ -108,14 +108,30 @@
   {
     "ContainingType": "PIMS.API.Controllers.PropertyController",
     "Method": "AddAsync",
-    "RelativePath": "api/v1/Property",
+    "RelativePath": "api/v1/Property/create",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "entity",
-        "Type": "PIMS.Domain.Entities.Property",
+        "Name": "property",
+        "Type": "PIMS.Application.Dtos.PropertyDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PIMS.API.Controllers.PropertyController",
+    "Method": "AddAsync",
+    "RelativePath": "api/v1/Property/create/bulk",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "properties",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Application.Dtos.PropertyDto, PIMS.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
@@ -124,7 +140,7 @@
   {
     "ContainingType": "PIMS.API.Controllers.PropertyController",
     "Method": "GetAllAsync",
-    "RelativePath": "api/v1/Property",
+    "RelativePath": "api/v1/Property/get",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -149,24 +165,8 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.PropertyController",
-    "Method": "UpdateAsync",
-    "RelativePath": "api/v1/Property",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "entity",
-        "Type": "PIMS.Domain.Entities.Property",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "PIMS.API.Controllers.PropertyController",
     "Method": "GetByIdAsync",
-    "RelativePath": "api/v1/Property/{id}",
+    "RelativePath": "api/v1/Property/get/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -181,15 +181,15 @@
   },
   {
     "ContainingType": "PIMS.API.Controllers.PropertyController",
-    "Method": "AddAsync",
-    "RelativePath": "api/v1/Property/bulk",
-    "HttpMethod": "POST",
+    "Method": "UpdateAsync",
+    "RelativePath": "api/v1/Property/update",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "entities",
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Domain.Entities.Property, PIMS.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Name": "req",
+        "Type": "PIMS.Application.Dtos.UpdatePropertyDto",
         "IsRequired": true
       }
     ],
@@ -198,14 +198,14 @@
   {
     "ContainingType": "PIMS.API.Controllers.PropertyController",
     "Method": "UpdateAsync",
-    "RelativePath": "api/v1/Property/bulk",
+    "RelativePath": "api/v1/Property/update/bulk",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "entities",
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Domain.Entities.Property, PIMS.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Name": "req",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PIMS.Application.Dtos.UpdatePropertyDto, PIMS.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],

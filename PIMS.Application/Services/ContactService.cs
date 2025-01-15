@@ -35,7 +35,7 @@ namespace PIMS.Application.Services
                 throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
 
             await _unitOfWork.contactRepository.AddAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         public async Task AddAsync(IEnumerable<Contact> entities, CancellationToken cancellationToken)
@@ -51,7 +51,7 @@ namespace PIMS.Application.Services
             }
 
             await _unitOfWork.contactRepository.AddAsync(entities, cancellationToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Contact>> GetAllAsync(int pageNumber, int pageSize, string filter, CancellationToken cancellationToken)
@@ -83,8 +83,12 @@ namespace PIMS.Application.Services
             if (!validationResult.IsValid)
                 throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
 
+
+            var daaaa = GetByIdAsync(entity.Id, cancellationToken);
+
+
             _unitOfWork.contactRepository.UpdateAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(IEnumerable<Contact> entities, CancellationToken cancellationToken)
@@ -100,7 +104,7 @@ namespace PIMS.Application.Services
             }
 
             _unitOfWork.contactRepository.UpdateAsync(entities, cancellationToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

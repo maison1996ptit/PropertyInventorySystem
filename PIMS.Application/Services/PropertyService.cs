@@ -24,11 +24,12 @@ namespace PIMS.Application.Services
                 throw new ArgumentNullException(nameof(entity));
 
             var validationResult = _propertyValidator.Validate(entity);
+
             if (!validationResult.IsValid)
                 throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
 
             await _unitOfWork.PropertyRepository.AddAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         public async Task AddAsync(IEnumerable<Property> entities, CancellationToken cancellationToken)
@@ -44,7 +45,7 @@ namespace PIMS.Application.Services
             }
 
             await _unitOfWork.PropertyRepository.AddAsync(entities, cancellationToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Property>> GetAllAsync(int pageNumber, int pageSize, string filter, CancellationToken cancellationToken)
@@ -77,7 +78,7 @@ namespace PIMS.Application.Services
                 throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
 
             _unitOfWork.PropertyRepository.UpdateAsync(entity,cancellationToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(IEnumerable<Property> entities, CancellationToken cancellationToken)
@@ -93,7 +94,7 @@ namespace PIMS.Application.Services
             }
 
             _unitOfWork.PropertyRepository.UpdateAsync(entities,cancellationToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

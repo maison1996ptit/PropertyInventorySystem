@@ -94,21 +94,31 @@ namespace PIMS.Infrastructure.Repositories
 
         public async Task<Contact> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            // Validate the input ID
-            if (id == Guid.Empty)
+            try
             {
-                throw new ArgumentException("ID cannot be an empty GUID.", nameof(id));
-            }
-            // Fetch the entity from the database based on the provided ID
-            var entity = await _context.Contacts
-                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+                // Validate the input ID
+                if (id == Guid.Empty)
+                {
+                    throw new ArgumentException("ID cannot be an empty GUID.", nameof(id));
+                }
 
-            // Check if the entity was not found and throw an exception if needed
-            if (entity == null)
-            {
-                throw new KeyNotFoundException($"No entity found with ID {id}.");
+                // Fetch the entity from the database based on the provided ID
+                Contact query = await _context.Contacts.AsQueryable().Where(p=>p.Id==id )
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                // Check if the entity was not found and throw an exception if needed
+                if (query == null)
+                {
+                    throw new KeyNotFoundException($"No entity found with ID {id}.");
+                }
+
+                return query;
             }
-            return entity;
+            catch (Exception ex)
+            {
+                // Log or handle the exception here to see what's going wrong
+                throw new InvalidOperationException("Error retrieving entity", ex);
+            }
         }
 
         public async Task UpdateAsync(Contact entity, CancellationToken cancellationToken)
@@ -124,8 +134,8 @@ namespace PIMS.Infrastructure.Repositories
                 throw new ArgumentException("Entity must have a valid ID.", nameof(entity));
             }
             // Check if the entity exists in the database
-            var existingEntity = await _context.Contacts
-                .FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
+
+            var existingEntity = GetByIdAsync(entity.Id, cancellationToken);
 
             if (existingEntity == null)
             {
@@ -134,6 +144,9 @@ namespace PIMS.Infrastructure.Repositories
 
             // Update the existing entity with the new values
             _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+
+            // Mark the entity as modified to ensure it's updated
+            _context.Entry(existingEntity).State = EntityState.Modified;
 
             await _context.SaveChangesAsync(cancellationToken);
         }

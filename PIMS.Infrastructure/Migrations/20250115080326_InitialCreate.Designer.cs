@@ -12,7 +12,7 @@ using PIMS.Infrastructure.Data;
 namespace PIMS.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250114160924_InitialCreate")]
+    [Migration("20250115080326_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -59,6 +59,9 @@ namespace PIMS.Infrastructure.Migrations
 
                     b.Property<Guid>("ContactId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AskingPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("EffectiveFrom")
                         .HasColumnType("datetime2");

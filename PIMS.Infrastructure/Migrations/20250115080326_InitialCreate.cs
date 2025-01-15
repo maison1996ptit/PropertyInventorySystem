@@ -48,6 +48,7 @@ namespace PIMS.Infrastructure.Migrations
                     PropertyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ContactId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AskingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     EffectiveFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EffectiveTill = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PIMS.Application.Dtos;
 using PIMS.Application.Interfaces;
+using PIMS.Application.Mappings;
 using PIMS.Domain.Entities;
 
 namespace PIMS.API.Controllers
@@ -15,13 +16,19 @@ namespace PIMS.API.Controllers
         {
             _propertyService = propertyService;
         }
-        [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] Property entity, CancellationToken cancellationToken)
+        [HttpPost("create")]
+        public async Task<IActionResult> AddAsync([FromBody] PropertyDto property, CancellationToken cancellationToken)
         {
             try
             {
-                await _propertyService.AddAsync(entity, cancellationToken);
-                return CreatedAtAction(nameof(GetByIdAsync), new { id = entity.Id }, entity);
+                var req =  new Property 
+                { 
+                    Address = property.Address ,
+                    Price = property.Price ,
+                    Name = property.Name ,
+                };
+                await _propertyService.AddAsync(req, cancellationToken);
+                return Ok(req);
             }
             catch (ArgumentException ex)
             {
@@ -33,13 +40,15 @@ namespace PIMS.API.Controllers
             }
         }
 
-        [HttpPost("bulk")]
-        public async Task<IActionResult> AddAsync([FromBody] IEnumerable<Property> entities, CancellationToken cancellationToken)
+        [HttpPost("create/bulk")]
+        public async Task<IActionResult> AddAsync([FromBody] IEnumerable<PropertyDto> properties, CancellationToken cancellationToken)
         {
             try
             {
-                await _propertyService.AddAsync(entities, cancellationToken);
-                return Ok(entities);
+                var req = PropertyMapper.ToEntities(properties);
+
+                await _propertyService.AddAsync(req, cancellationToken);
+                return Ok(req);
             }
             catch (ArgumentException ex)
             {
@@ -51,7 +60,7 @@ namespace PIMS.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("get")]
         public async Task<IActionResult> GetAllAsync([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string filter, CancellationToken cancellationToken)
         {
             try
@@ -69,7 +78,7 @@ namespace PIMS.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             try
@@ -91,12 +100,20 @@ namespace PIMS.API.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] Property entity, CancellationToken cancellationToken)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdatePropertyDto req, CancellationToken cancellationToken)
         {
             try
             {
-                await _propertyService.UpdateAsync(entity, cancellationToken);
+                var property = new Property
+                {
+                    Name = req.Name,
+                    Id = req.Id,
+                    Price = req.Price,
+                    Address = req.Address,
+                };
+
+                await _propertyService.UpdateAsync(property, cancellationToken);
                 return NoContent();
             }
             catch (ArgumentException ex)
@@ -109,13 +126,15 @@ namespace PIMS.API.Controllers
             }
         }
 
-        [HttpPut("bulk")]
-        public async Task<IActionResult> UpdateAsync([FromBody] IEnumerable<Property> entities, CancellationToken cancellationToken)
+        [HttpPut("update/bulk")]
+        public async Task<IActionResult> UpdateAsync([FromBody] IEnumerable<UpdatePropertyDto> req, CancellationToken cancellationToken)
         {
             try
             {
-                await _propertyService.UpdateAsync(entities, cancellationToken);
-                return Ok(entities);
+                var properties = PropertyMapper.ToEntities(req);
+
+                await _propertyService.UpdateAsync(properties, cancellationToken);
+                return Ok(properties);
             }
             catch (ArgumentException ex)
             {

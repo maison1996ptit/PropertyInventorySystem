@@ -25,6 +25,7 @@ namespace PIMS.Domain.Entities
         public Guid PropertyId { get; set; }
         public Guid ContactId { get; set; }
         public decimal Price { get; set; }
+        public decimal AskingPrice { get; set; }
         public DateTime EffectiveFrom { get; set; }
         public DateTime EffectiveTill { get; set; }
         public Property Property { get; set; }

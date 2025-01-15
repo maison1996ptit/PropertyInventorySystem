@@ -7,6 +7,6 @@ namespace PIMS.Application.UnitOfWork
     {
         IPropertyRepository<Property> PropertyRepository { get; }
         IContactRepository<Contact> contactRepository { get; }
-        Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
