@@ -1,0 +1,224 @@
+USE [master]
+GO
+/****** Object:  Database [PropertyInventoryData]    Script Date: 1/16/2025 11:59:06 PM ******/
+CREATE DATABASE [PropertyInventoryData]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'PropertyInventoryData', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MAYA0\MSSQL\DATA\PropertyInventoryData.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'PropertyInventoryData_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MAYA0\MSSQL\DATA\PropertyInventoryData_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [PropertyInventoryData] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [PropertyInventoryData].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [PropertyInventoryData] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [PropertyInventoryData] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [PropertyInventoryData] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [PropertyInventoryData] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [PropertyInventoryData] SET READ_COMMITTED_SNAPSHOT ON 
+GO
+ALTER DATABASE [PropertyInventoryData] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET RECOVERY FULL 
+GO
+ALTER DATABASE [PropertyInventoryData] SET  MULTI_USER 
+GO
+ALTER DATABASE [PropertyInventoryData] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [PropertyInventoryData] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [PropertyInventoryData] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [PropertyInventoryData] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [PropertyInventoryData] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [PropertyInventoryData] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'PropertyInventoryData', N'ON'
+GO
+ALTER DATABASE [PropertyInventoryData] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [PropertyInventoryData] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [PropertyInventoryData]
+GO
+/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 1/16/2025 11:59:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[__EFMigrationsHistory](
+	[MigrationId] [nvarchar](150) NOT NULL,
+	[ProductVersion] [nvarchar](32) NOT NULL,
+ CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY CLUSTERED 
+(
+	[MigrationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Contacts]    Script Date: 1/16/2025 11:59:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Contacts](
+	[Id] [uniqueidentifier] NOT NULL,
+	[FirstName] [nvarchar](max) NOT NULL,
+	[LastName] [nvarchar](max) NOT NULL,
+	[PhoneNumber] [nvarchar](max) NOT NULL,
+	[EmailAddress] [nvarchar](max) NOT NULL,
+ CONSTRAINT [PK_Contacts] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Properties]    Script Date: 1/16/2025 11:59:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Properties](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](max) NOT NULL,
+	[Address] [nvarchar](max) NOT NULL,
+	[Price] [decimal](18, 2) NOT NULL,
+	[CreatedDate] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_Properties] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PropertyContacts]    Script Date: 1/16/2025 11:59:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PropertyContacts](
+	[PropertyId] [uniqueidentifier] NOT NULL,
+	[ContactId] [uniqueidentifier] NOT NULL,
+	[Id] [uniqueidentifier] NOT NULL,
+	[PriceOfAcquisition] [decimal](18, 2) NOT NULL,
+	[AskingPrice] [decimal](18, 2) NOT NULL,
+	[EffectiveFrom] [datetime2](7) NOT NULL,
+	[CreatedDate] [datetime2](7) NOT NULL,
+	[EffectiveTill] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_PropertyContacts] PRIMARY KEY CLUSTERED 
+(
+	[PropertyId] ASC,
+	[ContactId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PropertyPriceAudits]    Script Date: 1/16/2025 11:59:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PropertyPriceAudits](
+	[Id] [uniqueidentifier] NOT NULL,
+	[PropertyId] [uniqueidentifier] NOT NULL,
+	[OlePrice] [decimal](18, 2) NOT NULL,
+	[NewPrice] [decimal](18, 2) NOT NULL,
+	[CreatedDate] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_PropertyPriceAudits] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20250116162512_InitialCreate', N'9.0.0')
+GO
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20250116163907_UpdateDatabase', N'9.0.0')
+GO
+INSERT [dbo].[Contacts] ([Id], [FirstName], [LastName], [PhoneNumber], [EmailAddress]) VALUES (N'6e04e332-106a-47c1-9b7e-29582041c51a', N'hanrry', N'nam', N'09887827453', N'nam@gmail.com')
+GO
+INSERT [dbo].[Contacts] ([Id], [FirstName], [LastName], [PhoneNumber], [EmailAddress]) VALUES (N'f8d65517-6ddd-492a-a204-7f4b87a952f7', N'hanrry', N'luu', N'09887827453', N'luu@gmail.com')
+GO
+INSERT [dbo].[Contacts] ([Id], [FirstName], [LastName], [PhoneNumber], [EmailAddress]) VALUES (N'7800ade5-0648-4e24-af9f-922aca63a9ed', N'hanrry', N'annie', N'09887827453', N'nam@gmail.com')
+GO
+INSERT [dbo].[Properties] ([Id], [Name], [Address], [Price], [CreatedDate]) VALUES (N'6873b22a-1d81-4eee-8a38-19c71a3fe9a0', N'PenHouse', N'NYC', CAST(150000.00 AS Decimal(18, 2)), CAST(N'2025-01-16T16:43:40.7699493' AS DateTime2))
+GO
+INSERT [dbo].[Properties] ([Id], [Name], [Address], [Price], [CreatedDate]) VALUES (N'83772b63-bab8-4aab-b394-55eff744d284', N'House', N'NYC', CAST(15000.00 AS Decimal(18, 2)), CAST(N'2025-01-16T16:43:27.6102584' AS DateTime2))
+GO
+INSERT [dbo].[Properties] ([Id], [Name], [Address], [Price], [CreatedDate]) VALUES (N'5e17ab42-9ca7-4e1c-b1d6-c149e071f8f3', N'Hotel', N'NYC', CAST(150000.00 AS Decimal(18, 2)), CAST(N'2025-01-16T16:43:58.9793285' AS DateTime2))
+GO
+INSERT [dbo].[PropertyContacts] ([PropertyId], [ContactId], [Id], [PriceOfAcquisition], [AskingPrice], [EffectiveFrom], [CreatedDate], [EffectiveTill]) VALUES (N'6873b22a-1d81-4eee-8a38-19c71a3fe9a0', N'6e04e332-106a-47c1-9b7e-29582041c51a', N'3fc56c4a-9499-42e7-9426-ec592f9a190b', CAST(1500000.00 AS Decimal(18, 2)), CAST(1600000.00 AS Decimal(18, 2)), CAST(N'2025-01-02T00:00:00.0000000' AS DateTime2), CAST(N'2025-01-01T00:00:00.0000000' AS DateTime2), CAST(N'2025-01-30T00:00:00.0000000' AS DateTime2))
+GO
+INSERT [dbo].[PropertyContacts] ([PropertyId], [ContactId], [Id], [PriceOfAcquisition], [AskingPrice], [EffectiveFrom], [CreatedDate], [EffectiveTill]) VALUES (N'83772b63-bab8-4aab-b394-55eff744d284', N'f8d65517-6ddd-492a-a204-7f4b87a952f7', N'b93d1475-3af1-43d8-ae73-cc8e0085b541', CAST(1700000.00 AS Decimal(18, 2)), CAST(1900000.00 AS Decimal(18, 2)), CAST(N'2025-01-02T00:00:00.0000000' AS DateTime2), CAST(N'2025-01-01T00:00:00.0000000' AS DateTime2), CAST(N'2025-01-30T00:00:00.0000000' AS DateTime2))
+GO
+/****** Object:  Index [IX_PropertyContacts_ContactId]    Script Date: 1/16/2025 11:59:06 PM ******/
+CREATE NONCLUSTERED INDEX [IX_PropertyContacts_ContactId] ON [dbo].[PropertyContacts]
+(
+	[ContactId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_PropertyPriceAudits_PropertyId]    Script Date: 1/16/2025 11:59:06 PM ******/
+CREATE NONCLUSTERED INDEX [IX_PropertyPriceAudits_PropertyId] ON [dbo].[PropertyPriceAudits]
+(
+	[PropertyId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[PropertyContacts]  WITH CHECK ADD  CONSTRAINT [FK_PropertyContacts_Contacts_ContactId] FOREIGN KEY([ContactId])
+REFERENCES [dbo].[Contacts] ([Id])
+GO
+ALTER TABLE [dbo].[PropertyContacts] CHECK CONSTRAINT [FK_PropertyContacts_Contacts_ContactId]
+GO
+ALTER TABLE [dbo].[PropertyContacts]  WITH CHECK ADD  CONSTRAINT [FK_PropertyContacts_Properties_PropertyId] FOREIGN KEY([PropertyId])
+REFERENCES [dbo].[Properties] ([Id])
+GO
+ALTER TABLE [dbo].[PropertyContacts] CHECK CONSTRAINT [FK_PropertyContacts_Properties_PropertyId]
+GO
+ALTER TABLE [dbo].[PropertyPriceAudits]  WITH CHECK ADD  CONSTRAINT [FK_PropertyPriceAudits_Properties_PropertyId] FOREIGN KEY([PropertyId])
+REFERENCES [dbo].[Properties] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[PropertyPriceAudits] CHECK CONSTRAINT [FK_PropertyPriceAudits_Properties_PropertyId]
+GO
+USE [master]
+GO
+ALTER DATABASE [PropertyInventoryData] SET  READ_WRITE 
+GO
