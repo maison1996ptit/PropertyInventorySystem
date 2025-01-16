@@ -30,8 +30,5 @@ namespace PIMS.Domain.Entities
         public DateTime EffectiveTill { get; set; }
         public Property Property { get; set; }
         public Contact Contact { get; set; }
-
-
-
     }
 }

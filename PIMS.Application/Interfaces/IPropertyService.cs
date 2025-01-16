@@ -1,4 +1,5 @@
-﻿using PIMS.Domain.Entities;
+﻿using PIMS.Application.Dtos;
+using PIMS.Domain.Entities;
 
 namespace PIMS.Application.Interfaces
 {
@@ -11,5 +12,7 @@ namespace PIMS.Application.Interfaces
         Task AddAsync(IEnumerable<Property> entities, CancellationToken cancellationToken);
         Task UpdateAsync(Property entity, CancellationToken cancellationToken);
         Task UpdateAsync(IEnumerable<Property> entities, CancellationToken cancellationToken);
+        Task<IEnumerable<PropertyContactsDto>> GetDataDashboardAsync(int pageNumber, int pageSize
+                                        , string filter, CancellationToken cancellationToken);
     }
 }

@@ -145,5 +145,22 @@ namespace PIMS.API.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
+        [HttpGet("dashboard")]
+        public async Task<IActionResult> GetAllAsync([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string filter, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var properties = await _propertyService.GetAllAsync(pageNumber, pageSize, filter, cancellationToken);
+                return Ok(properties);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
     }
 }

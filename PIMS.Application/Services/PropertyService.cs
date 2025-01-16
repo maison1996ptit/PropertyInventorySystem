@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using PIMS.Application.Dtos;
 using PIMS.Application.Interfaces;
 using PIMS.Application.UnitOfWork;
 using PIMS.Application.Validators;
@@ -95,6 +96,14 @@ namespace PIMS.Application.Services
 
             _unitOfWork.PropertyRepository.UpdateAsync(entities,cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+        public Task<IEnumerable<PropertyContactsDto>> GetDataDashboardAsync(int pageNumber, int pageSize
+                                        , string filter, CancellationToken cancellationToken)
+        {
+            if (pageNumber <= 0 || pageSize <= 0)
+                throw new ArgumentException("Page number and page size must be greater than zero.");
+
+            return await _unitOfWork.PropertyRepository.GetAllAsync(pageNumber, pageSize, filter, cancellationToken);
         }
     }
 }
