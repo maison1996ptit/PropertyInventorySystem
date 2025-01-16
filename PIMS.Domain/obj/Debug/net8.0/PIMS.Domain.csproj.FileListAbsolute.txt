@@ -1,0 +1,12 @@
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\bin\Debug\net8.0\PIMS.Domain.deps.json
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\bin\Debug\net8.0\PIMS.Domain.dll
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\bin\Debug\net8.0\PIMS.Domain.pdb
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\obj\Debug\net8.0\PIMS.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\obj\Debug\net8.0\PIMS.Domain.AssemblyInfoInputs.cache
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\obj\Debug\net8.0\PIMS.Domain.AssemblyInfo.cs
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\obj\Debug\net8.0\PIMS.Domain.csproj.CoreCompileInputs.cache
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\obj\Debug\net8.0\PIMS.Domain.sourcelink.json
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\obj\Debug\net8.0\PIMS.Domain.dll
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\obj\Debug\net8.0\refint\PIMS.Domain.dll
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\obj\Debug\net8.0\PIMS.Domain.pdb
+D:\EPIC\PropertyInventorySystem\PIMS.Domain\obj\Debug\net8.0\ref\PIMS.Domain.dll
