@@ -21,6 +21,7 @@ namespace PIMS.Domain.Entities
             EffectiveFrom = effectiveFrom;
             EffectiveTill = effectiveTill;
         }
+        public Guid Id { get; set; }
         public PriceOfAcquisition() { }
         public Guid PropertyId { get; set; }
         public Guid ContactId { get; set; }

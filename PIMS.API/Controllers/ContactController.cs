@@ -73,10 +73,11 @@ namespace PIMS.API.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string filter, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllAsync([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string? filter, CancellationToken cancellationToken)
         {
             try
             {
+                filter = filter == null ? string.Empty : filter;
                 var contacts = await _contactService.GetAllAsync(pageNumber, pageSize, filter, cancellationToken);
                 return Ok(contacts);
             }

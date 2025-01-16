@@ -97,13 +97,13 @@ namespace PIMS.Application.Services
             _unitOfWork.PropertyRepository.UpdateAsync(entities,cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
-        public Task<IEnumerable<PropertyContactsDto>> GetDataDashboardAsync(int pageNumber, int pageSize
+        public async Task<IEnumerable<PropertyContactsDto>> GetDataDashboardAsync(int pageNumber, int pageSize
                                         , string filter, CancellationToken cancellationToken)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 throw new ArgumentException("Page number and page size must be greater than zero.");
 
-            return await _unitOfWork.PropertyRepository.GetAllAsync(pageNumber, pageSize, filter, cancellationToken);
+            return await _unitOfWork.PropertyOptionRepository.GetDataDashboardAsync(pageNumber, pageSize, filter, cancellationToken);
         }
     }
 }

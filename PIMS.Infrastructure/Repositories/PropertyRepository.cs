@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PIMS.Application.Dtos;
 using PIMS.Application.Interfaces;
 using PIMS.Domain.Entities;
+using PIMS.Domain.Enums;
 using PIMS.Infrastructure.Data;
 using PIMS.Infrastructure.Helpers;
 using PIMS.Infrastructure.Providers.Interface;
@@ -188,7 +190,7 @@ namespace PIMS.Infrastructure.Repositories
 
             await _context.PropertyPriceAudits.AddAsync(auditData, cancellationToken);
         }
-        public Task<IEnumerable<PropertyContactsDto>> GetDataDashboardAsync(int pageNumber, int pageSize
+        public async Task<IEnumerable<PropertyContactsDto>> GetDataDashboardAsync(int pageNumber, int pageSize
                                         , string filter, CancellationToken cancellationToken)
         {
             // Validate input arguments
@@ -217,7 +219,7 @@ namespace PIMS.Infrastructure.Repositories
                                                     select new PropertyContactsDto
                                                     {
                                                         PropertyName = property.Name,
-                                                        AskingPrice = audit?.Price ?? 0,
+                                                        AskingPrice = audit.Price == 0 ? audit.Price : 0 ,
                                                         Owner = contact == null ? string.Empty 
                                                                             : contact.FirstName + " " + contact.LastName,
                                                         DatePurchare = priceOfAcquisitions.EffectiveFrom,
@@ -227,7 +229,7 @@ namespace PIMS.Infrastructure.Repositories
             // Apply filter if provided
             if (!string.IsNullOrWhiteSpace(filter))
             {
-                query = query.Where(p => p.Name.Contains(filter));
+                query = query.Where(p => p.PropertyName.Contains(filter));
             }
             query = query
                 .Skip((pageNumber - 1) * pageSize) // Skip the items of previous pages

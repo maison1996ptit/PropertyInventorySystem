@@ -8,6 +8,7 @@ namespace PIMS.Application.Dtos
 {
     public class PropertyContactsDto 
     {
+        public Guid Id { get; set; }
         public string PropertyName { get; set; }
         public decimal AskingPrice { get; set; }
         public string Owner { get; set; }
