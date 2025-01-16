@@ -8,18 +8,19 @@ namespace PIMS.Domain.Entities
 {
     public  class PropertyPriceAudit
     {
-        public PropertyPriceAudit(Guid id, Guid propertyId, decimal price,  DateTime createdDate)
+        public PropertyPriceAudit(Guid id, Guid propertyId, decimal oldPrice,decimal NewPrice,  DateTime createdDate)
         {
             Id = id;
             PropertyId = propertyId;
-            Price = price;
+            NewPrice = oldPrice;
             CreatedDate = createdDate;
+            OlePrice = NewPrice;
         }
-
         public Guid Id { get; set; }
         public PropertyPriceAudit() { }
         public Guid PropertyId { get; set; } 
-        public decimal Price { get; set; }
+        public decimal OlePrice { get; set; }
+        public decimal NewPrice { get; set; }
         public DateTime CreatedDate { get; set; }
         public Property Property { get; set; }
     }

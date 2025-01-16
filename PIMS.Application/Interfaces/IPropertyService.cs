@@ -13,6 +13,6 @@ namespace PIMS.Application.Interfaces
         Task UpdateAsync(Property entity, CancellationToken cancellationToken);
         Task UpdateAsync(IEnumerable<Property> entities, CancellationToken cancellationToken);
         Task<IEnumerable<PropertyContactsDto>> GetDataDashboardAsync(int pageNumber, int pageSize
-                                        , string filter, CancellationToken cancellationToken);
+                                      , string filter, CancellationToken cancellationToken);
     }
 }

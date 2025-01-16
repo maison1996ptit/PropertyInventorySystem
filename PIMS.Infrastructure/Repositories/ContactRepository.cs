@@ -4,6 +4,7 @@ using PIMS.Application.Interfaces;
 using PIMS.Domain.Entities;
 using PIMS.Infrastructure.Data;
 using PIMS.Infrastructure.Providers.Interface;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PIMS.Infrastructure.Repositories
 {
@@ -135,7 +136,9 @@ namespace PIMS.Infrastructure.Repositories
             }
             // Check if the entity exists in the database
 
-            var existingEntity = GetByIdAsync(entity.Id, cancellationToken);
+            var existingEntity =  _context.Contacts.AsQueryable()
+                                                    .Where(p => p.Id == entity.Id)
+                                                    .FirstOrDefault();
 
             if (existingEntity == null)
             {

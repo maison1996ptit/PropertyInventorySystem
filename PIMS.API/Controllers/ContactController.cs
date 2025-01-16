@@ -127,7 +127,7 @@ namespace PIMS.API.Controllers
                 };
 
                 await _contactService.UpdateAsync(req, cancellationToken);
-                return NoContent(); // Return a successful response with no content
+                return Ok(); // Return a successful response with no content
             }
             catch (ArgumentException ex)
             {

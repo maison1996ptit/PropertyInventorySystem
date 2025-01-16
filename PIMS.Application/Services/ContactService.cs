@@ -83,10 +83,6 @@ namespace PIMS.Application.Services
             if (!validationResult.IsValid)
                 throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
 
-
-            var daaaa = GetByIdAsync(entity.Id, cancellationToken);
-
-
             _unitOfWork.contactRepository.UpdateAsync(entity, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }

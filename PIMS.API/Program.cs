@@ -10,6 +10,7 @@ using PIMS.Infrastructure.Providers.Interface;
 using PIMS.Infrastructure.Repositories;
 using PIMS.Application.UnitOfWork;
 using PIMS.Infrastructure.UnitOfWork;
+using PIMS.Application.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -106,6 +106,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "PIMS.API.Controllers.DashboardController",
+    "Method": "GetDataDashboardAsync",
+    "RelativePath": "api/v1/Dashboard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "filter",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PIMS.API.Controllers.PropertyController",
     "Method": "AddAsync",
     "RelativePath": "api/v1/Property/create",

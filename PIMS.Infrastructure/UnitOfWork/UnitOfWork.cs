@@ -15,7 +15,6 @@ namespace PIMS.Infrastructure.UnitOfWork
 
         // Các repository sẽ được khởi tạo
         private IPropertyRepository<Property> _propertyRepository;
-        private IPropertyMasterRepository<PropertyContactsDto> _propertyoptionRepository;
         private IContactRepository<Contact> _contactRepository;
         private readonly ITimeProvider _timeProvider;
         private readonly ILogger<PropertyRepository> _loggerProperty;
@@ -32,13 +31,6 @@ namespace PIMS.Infrastructure.UnitOfWork
             get
             {
                 return _propertyRepository ??= new PropertyRepository(_context, _timeProvider, _loggerProperty);
-            }
-        }
-        public IPropertyMasterRepository<PropertyContactsDto> PropertyOptionRepository
-        {
-            get
-            {
-                return _propertyoptionRepository ??= new PropertyMasterRepository(_context, _timeProvider, _loggerMaster);
             }
         }
         public IContactRepository<Contact> contactRepository

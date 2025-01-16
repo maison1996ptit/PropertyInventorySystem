@@ -47,9 +47,11 @@ namespace PIMS.Infrastructure.Migrations
                 {
                     PropertyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ContactId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PriceOfAcquisition = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     AskingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     EffectiveFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EffectiveTill = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -75,7 +77,8 @@ namespace PIMS.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PropertyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OlePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    NewPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

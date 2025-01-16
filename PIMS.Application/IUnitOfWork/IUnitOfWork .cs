@@ -7,7 +7,6 @@ namespace PIMS.Application.UnitOfWork
     public interface IUnitOfWork: IDisposable
     {
         IPropertyRepository<Property> PropertyRepository { get; }
-        IPropertyMasterRepository<PropertyContactsDto> PropertyOptionRepository { get; }
         IContactRepository<Contact> contactRepository { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

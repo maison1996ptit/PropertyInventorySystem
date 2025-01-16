@@ -133,8 +133,11 @@ namespace PIMS.Infrastructure.Repositories
             {
                 throw new KeyNotFoundException($"No entity found with ID {entity.Id}.");
             }
+            if (entity.Price != existingEntity.Price)
+            {
+                await AddAudit(entity, existingEntity, cancellationToken);
+            }
             // Add audit table
-            await AddAudit(entity, existingEntity, cancellationToken);
             // Update the existing entity with the new values
             _context.Entry(existingEntity).CurrentValues.SetValues(entity);
 
@@ -184,7 +187,8 @@ namespace PIMS.Infrastructure.Repositories
             var auditData = new PropertyPriceAudit
             {
                 PropertyId = newData.Id,
-                Price = oldData.Price,
+                OlePrice = oldData.Price,
+                NewPrice = newData.Price,
                 CreatedDate = DateTime.UtcNow
             };
 
@@ -200,44 +204,36 @@ namespace PIMS.Infrastructure.Repositories
             }
             if (pageSize <= 0)
             {
-                throw new ArgumentException("Page size must be greater than zero.", nameof(pageSize));
+                throw new ArgumentException("Page size must be greater than zero.", nameof(pageSize)); 
             }
             // Start building the query to fetch data from the database
-            IQueryable<PropertyContactsDto> query =
-                                                    from priceOfAcquisitions in _context.PriceOfAcquisitions
-                                                    join contact in _context.Contacts
-                                                        on priceOfAcquisitions.ContactId equals contact.Id into contactGroup
-                                                    from contact in contactGroup.DefaultIfEmpty()
-                                                    join property in _context.Properties
-                                                        on priceOfAcquisitions.PropertyId equals property.Id into propertyGroup
-                                                    from property in propertyGroup.DefaultIfEmpty()
-                                                    join audit in _context.PropertyPriceAudits
-                                                        on priceOfAcquisitions.PropertyId equals audit.PropertyId into auditGroup
-                                                    from audit in auditGroup.DefaultIfEmpty()
-                                                    let soldAtUsd = CurrencyHelper.ConvertCurrency(property.Price
-                                                                                                    , CurrencyRate.EUR_TO_USD) 
-                                                    select new PropertyContactsDto
-                                                    {
-                                                        PropertyName = property.Name,
-                                                        AskingPrice = audit.Price == 0 ? audit.Price : 0 ,
-                                                        Owner = contact == null ? string.Empty 
-                                                                            : contact.FirstName + " " + contact.LastName,
-                                                        DatePurchare = priceOfAcquisitions.EffectiveFrom,
-                                                        SoldAtEur = property.Price,
-                                                        SoldAtUSD = soldAtUsd,
-                                                    };
-            // Apply filter if provided
-            if (!string.IsNullOrWhiteSpace(filter))
-            {
-                query = query.Where(p => p.PropertyName.Contains(filter));
-            }
+            var query =  _context.Properties.AsNoTracking().Include(x => x.PropertyContacts).ThenInclude(x=>x.Contact)
+                                                        .Where(p=>filter == null || p.Name.Contains(filter));
             query = query
                 .Skip((pageNumber - 1) * pageSize) // Skip the items of previous pages
                 .Take(pageSize);                  // Take only the items for the current page
 
-            var result = await query.ToListAsync(cancellationToken);
-
-            return result;
+            var properties = await query.ToListAsync(cancellationToken);
+            var data = new List<PropertyContactsDto>();
+            foreach (var property in properties)
+            {
+                foreach (var propertyContact in property.PropertyContacts)
+                {
+                    var item = new PropertyContactsDto
+                    {
+                        PropertyName = property.Name,
+                        AskingPrice = propertyContact.AskingPrice,
+                        Owner = propertyContact.Contact.FirstName + " " + propertyContact.Contact.LastName,
+                        DatePurchare = propertyContact.CreatedDate,
+                        SoldAtEur = propertyContact.PriceOfAcquisition,
+                        SoldAtUSD = CurrencyHelper.ConvertCurrency(propertyContact.PriceOfAcquisition
+                                                                    , CurrencyRate.EUR_TO_USD),
+                        Id = propertyContact.Id
+                    };
+                    data.Add(item);
+                }
+            }
+            return data;
         }
     }
 }

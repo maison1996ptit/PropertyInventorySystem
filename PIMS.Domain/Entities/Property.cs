@@ -21,7 +21,7 @@ namespace PIMS.Domain.Entities
         public string Address { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public DateTime CreatedDate { get; set; }
-        public ICollection<PriceOfAcquisition> PropertyContacts { get; set; }
+        public ICollection<PropertyContacts> PropertyContacts { get; set; }
         public ICollection<PropertyPriceAudit> propertyPriceAudits { get; set; }
     }
 }

@@ -78,7 +78,7 @@ namespace PIMS.Application.Services
             if (!validationResult.IsValid)
                 throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
 
-            _unitOfWork.PropertyRepository.UpdateAsync(entity,cancellationToken);
+            await _unitOfWork.PropertyRepository.UpdateAsync(entity,cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
@@ -94,16 +94,12 @@ namespace PIMS.Application.Services
                     throw new ArgumentException(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
             }
 
-            _unitOfWork.PropertyRepository.UpdateAsync(entities,cancellationToken);
+            await _unitOfWork.PropertyRepository.UpdateAsync(entities,cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
-        public async Task<IEnumerable<PropertyContactsDto>> GetDataDashboardAsync(int pageNumber, int pageSize
-                                        , string filter, CancellationToken cancellationToken)
+        public async Task<IEnumerable<PropertyContactsDto>> GetDataDashboardAsync(int pageNumber, int pageSize, string filter, CancellationToken cancellationToken)
         {
-            if (pageNumber <= 0 || pageSize <= 0)
-                throw new ArgumentException("Page number and page size must be greater than zero.");
-
-            return await _unitOfWork.PropertyOptionRepository.GetDataDashboardAsync(pageNumber, pageSize, filter, cancellationToken);
+            return await _unitOfWork.PropertyRepository.GetDataDashboardAsync(pageNumber, pageSize, filter, cancellationToken);
         }
     }
 }

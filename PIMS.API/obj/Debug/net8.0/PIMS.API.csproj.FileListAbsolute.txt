@@ -1,3 +1,10 @@
+D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.csproj.AssemblyReference.cache
+D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.GeneratedMSBuildEditorConfig.editorconfig
+D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.AssemblyInfoInputs.cache
+D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.AssemblyInfo.cs
+D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.csproj.CoreCompileInputs.cache
+D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.MvcApplicationPartsAssemblyInfo.cache
+D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.sourcelink.json
 D:\EPIC\PropertyInventorySystem\PIMS.API\bin\Debug\net8.0\appsettings.Development.json
 D:\EPIC\PropertyInventorySystem\PIMS.API\bin\Debug\net8.0\appsettings.json
 D:\EPIC\PropertyInventorySystem\PIMS.API\bin\Debug\net8.0\PIMS.API.exe
@@ -77,14 +84,6 @@ D:\EPIC\PropertyInventorySystem\PIMS.API\bin\Debug\net8.0\PIMS.Infrastructure.dl
 D:\EPIC\PropertyInventorySystem\PIMS.API\bin\Debug\net8.0\PIMS.Infrastructure.pdb
 D:\EPIC\PropertyInventorySystem\PIMS.API\bin\Debug\net8.0\PIMS.Application.pdb
 D:\EPIC\PropertyInventorySystem\PIMS.API\bin\Debug\net8.0\PIMS.Domain.pdb
-D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.csproj.AssemblyReference.cache
-D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.GeneratedMSBuildEditorConfig.editorconfig
-D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.AssemblyInfoInputs.cache
-D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.AssemblyInfo.cs
-D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.csproj.CoreCompileInputs.cache
-D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.MvcApplicationPartsAssemblyInfo.cs
-D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.MvcApplicationPartsAssemblyInfo.cache
-D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\PIMS.API.sourcelink.json
 D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\staticwebassets.build.json
 D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\staticwebassets.development.json
 D:\EPIC\PropertyInventorySystem\PIMS.API\obj\Debug\net8.0\staticwebassets\msbuild.PIMS.API.Microsoft.AspNetCore.StaticWebAssets.props

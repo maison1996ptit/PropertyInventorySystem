@@ -12,8 +12,8 @@ using PIMS.Infrastructure.Data;
 namespace PIMS.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250115080326_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250116163907_UpdateDatabase")]
+    partial class UpdateDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,33 +52,6 @@ namespace PIMS.Infrastructure.Migrations
                     b.ToTable("Contacts");
                 });
 
-            modelBuilder.Entity("PIMS.Domain.Entities.PriceOfAcquisition", b =>
-                {
-                    b.Property<Guid>("PropertyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ContactId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("AskingPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("EffectiveFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EffectiveTill")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("PropertyId", "ContactId");
-
-                    b.HasIndex("ContactId");
-
-                    b.ToTable("PriceOfAcquisitions");
-                });
-
             modelBuilder.Entity("PIMS.Domain.Entities.Property", b =>
                 {
                     b.Property<Guid>("Id")
@@ -104,6 +77,39 @@ namespace PIMS.Infrastructure.Migrations
                     b.ToTable("Properties");
                 });
 
+            modelBuilder.Entity("PIMS.Domain.Entities.PropertyContacts", b =>
+                {
+                    b.Property<Guid>("PropertyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ContactId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AskingPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EffectiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EffectiveTill")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("PriceOfAcquisition")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("PropertyId", "ContactId");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("PropertyContacts");
+                });
+
             modelBuilder.Entity("PIMS.Domain.Entities.PropertyPriceAudit", b =>
                 {
                     b.Property<Guid>("Id")
@@ -113,7 +119,10 @@ namespace PIMS.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("NewPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OlePrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("PropertyId")
@@ -126,7 +135,7 @@ namespace PIMS.Infrastructure.Migrations
                     b.ToTable("PropertyPriceAudits");
                 });
 
-            modelBuilder.Entity("PIMS.Domain.Entities.PriceOfAcquisition", b =>
+            modelBuilder.Entity("PIMS.Domain.Entities.PropertyContacts", b =>
                 {
                     b.HasOne("PIMS.Domain.Entities.Contact", "Contact")
                         .WithMany("PropertyContacts")

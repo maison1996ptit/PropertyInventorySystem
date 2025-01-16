@@ -7,9 +7,9 @@ namespace PIMS.API.Controllers
     [Route("api/v1/[controller]")]
     public class DashboardController : Controller
     {
-        private readonly IPropertyMasterService _propertyService;
+        private readonly  IPropertyService _propertyService;
 
-        public DashboardController(IPropertyMasterService propertyService)
+        public DashboardController(IPropertyService propertyService)
         {
             _propertyService = propertyService;
         }

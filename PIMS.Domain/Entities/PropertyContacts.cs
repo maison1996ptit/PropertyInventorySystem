@@ -6,28 +6,31 @@ using System.Threading.Tasks;
 
 namespace PIMS.Domain.Entities
 {
-    public class PriceOfAcquisition
+    public class PropertyContacts
     {
 
-        public PriceOfAcquisition(Guid propertyId
+        public PropertyContacts(Guid propertyId
                                     , Guid contactId
                                     , decimal price
                                     , DateTime effectiveFrom
-                                    , DateTime effectiveTill)
+                                    , DateTime effectiveTill,
+DateTime createdDate)
         {
             PropertyId = propertyId;
             ContactId = contactId;
-            Price = price;
+            PriceOfAcquisition = price;
             EffectiveFrom = effectiveFrom;
             EffectiveTill = effectiveTill;
+            CreatedDate = createdDate;
         }
         public Guid Id { get; set; }
-        public PriceOfAcquisition() { }
+        public PropertyContacts() { }
         public Guid PropertyId { get; set; }
         public Guid ContactId { get; set; }
-        public decimal Price { get; set; }
+        public decimal PriceOfAcquisition { get; set; }
         public decimal AskingPrice { get; set; }
         public DateTime EffectiveFrom { get; set; }
+        public DateTime CreatedDate { get; set; }
         public DateTime EffectiveTill { get; set; }
         public Property Property { get; set; }
         public Contact Contact { get; set; }
